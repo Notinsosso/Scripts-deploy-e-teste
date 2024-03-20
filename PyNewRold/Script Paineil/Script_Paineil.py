@@ -3,28 +3,27 @@ import time
 import pyautogui
 import subprocess
 import pygetwindow as gw
-import winsound
 
 # Configurações
 Timeout = 5000  # tempo de timeout em ms
-Address = "10.0.1.103"  # endereço para onde vai pingar
+Address = "10.0.0.3"  # endereço para onde vai pingar
 AA = "senha"  # login
 BB = "123"  # senha
-frequency = 3000  # Set Frequency To 2500 Hertz
-duration = 5000  # Set Duration To 1000 ms == 1 second
+
 
 # Funções de automação
-def open_ASA():
+def open_SZN():
     subprocess.Popen(["C:\\Sistemas\\SZNasa\\SZNasa13042023.exe"]) #Abre o SZN
     time.sleep(2.5)
-    win = gw.getWindowsWithTitle('Entrando no Sistema')[0]
-    win.activate()
+    win = gw.getWindowsWithTitle('Entrando no Sistema')[0] # Pega o nome da janela de login
+    win.activate() # Força a janela de login do SZN ir pra frente
 
-def close_ASA():
-    subprocess.Popen(["taskkill", "/f", "/im", "SZNAsa13042023.exe"])
+def close_SZN():
+    subprocess.Popen(["taskkill", "/f", "/im", "SZNAsa13042023.exe"]) # Apenas mata o processo
 
-def check_asa():
-   win = gw.getWindowsWithTitle('Painel de Chamada - Szn Informática')
+#Função para checar se existe um painel já aberto e se existir, ele puxa pra frente 
+def check_SZN():
+   win = gw.getWindowsWithTitle('Painel de Chamada - Szn Informática') # Pega o nome da janela do painel e joga na variável
    if win:
         win[0].activate()
         return True 
@@ -37,28 +36,28 @@ while True:
     RTT = subprocess.run(["ping", "-n", "1", "-w", str(Timeout), Address], capture_output=True)
     RTT = RTT.returncode
     
-    if RTT == 0:  # Se o ping for bem sucedido
-        if check_asa():
-            continue
+    if RTT == 0:  # Se o ping for bem sucedido, ele vai dar 0 como resposta, então ele continua o código se a condição for atendida
+        if check_SZN(): # Aqui ele checa se existe um painel já aberto
+            continue # Se teve resposta do servidor e o SZN está aberto no painel, então ele continuará a iteração ignorando o resto do código (Não abrirá o SZN novamente e continuará verificando se esta pingando)
+        #Caso o ping retornou e não tem nenhum SZN aberto, ele irá abrir com o código abaixo
            
-        open_ASA()
+        open_SZN()
         
 
-        pyautogui.write(AA)
-        pyautogui.press("tab")
+        pyautogui.write(AA) # Cola o usuário definido na variável AA
+        pyautogui.press("tab") # Vai para o campo abaixo
         time.sleep(0.9) 
-        pyautogui.write(BB)
+        pyautogui.write(BB) # Cola a senha definida na váriavel BB
         time.sleep(0.9)
-        pyautogui.press("enter")
+        pyautogui.press("enter") # Usa o botão Enter para logar
         time.sleep(2.5)
-        pyautogui.click(147, 66)
+        pyautogui.click(147, 66) # Clica no primeiro ícone
         time.sleep(2.5)
-        pyautogui.click(1848, 579)
+        pyautogui.click(1848, 579) # Clica na opção painel
         time.sleep(2.5)
-        winsound.Beep(frequency, duration)
 
     
-    else:  # Se o ping falhar
-        close_ASA()
+    else:  # Se a resposta do RTT for diferente de 0, então o endereço não respondeu o ping, ele irá fechar o ASA
+        close_SZN()
 
     time.sleep(3)  # Aguarda 3 segundos antes da próxima iteração
