@@ -15,12 +15,12 @@ CBad = 0
 Pid = []
 NCaminhos = 3
 Caminhos = [
-    r"C:\Users\luiz.molina\Downloads\Stremio+4.4.165.exe",
-    r"C:\Users\luiz.molina\Downloads\Stremio+4.4.165.exe",
-    r"C:\Users\luiz.molina\Downloads\Stremio+4.4.165.exe"
+    r"C:\Users\luiz.molina\Downloads\teste1.exe",
+    r"C:\Users\luiz.molina\Downloads\teste2.exe",
+    r"C:\Users\luiz.molina\Downloads\teste3.exe"
 ]
 
-def checar(host, port, user, password):
+def checar(host, port, user, password): //t
     try:
         conn = mysql.connector.connect(
             host=host,
