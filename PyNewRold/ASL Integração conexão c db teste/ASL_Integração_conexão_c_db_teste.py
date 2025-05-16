@@ -3,11 +3,13 @@ import subprocess
 import psutil
 import time
 
+### Lembrar de transofrmar Login/Senha em Hash ###
+
 ###
 host = 'localhost'
 port = 3306  
-user = 'skillo'
-password = 'skilloeocara'
+user = 'suser'
+password = 'suserhash'
 ###
 CGood = 0
 CBad = 0 
